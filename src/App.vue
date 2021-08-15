@@ -1,36 +1,21 @@
 <template>
   <div class="app">
-    <form @submit.prevent>
-      <h4>Создание поста</h4>
-      <input
-        v-bind:value="title"
-        @input="title = $event.target.value"
-        class="input"
-        type="text"
-        placeholder="Название"
-      />
-      <input
-        v-bind:value="body"
-        @input="title = $event.target.value"
-        class="input"
-        type="text"
-        placeholder="Описание"
-      />
-      <button 
-      class="btn" 
-      @click="createPost">
-      Создать
-      </button>
-    </form>
-  </div>
-  <div class="post" v-for="post in posts">
-    <div><strong>Название:</strong> {{ post.title }}</div>
-    <div><strong>Название:</strong> {{ post.body }}</div>
+    <post-form
+      @create="createPost">
+    </post-form>
+    <post-list 
+    :posts="posts"
+    ></post-list>
   </div>
 </template>
 
 <script>
+import PostForm from "@/components/PostForm";
+import PostList from "@/components/PostList"
 export default {
+  components: {
+    PostList, PostForm
+  },
   data() {
     return {
       posts: [
@@ -39,20 +24,11 @@ export default {
         { id: 3, title: "Пост 3", body: "Описание поста 3" },
         { id: 4, title: "Пост 4", body: "Описание поста 4" },
       ],
-      title: "",
-      body: "",
     };
   },
   methods: {
-    createPost(event) {
-      const newPost = {
-        id: Date.now(),
-        title: this.title,
-        body: this.body,
-      }
-      this.posts.push(newPost);
-      this.title = "";
-      this.body = "";
+    createPost(post) {
+      this.posts.push(post)
     },
   },
 };
@@ -66,11 +42,6 @@ export default {
 }
 .app {
   padding: 20px;
-}
-.post {
-  padding: 15px;
-  border: 1px solid black;
-  margin-top: 15px;
 }
 form {
   display: flex;
